@@ -20,8 +20,8 @@ const Projects = () => {
     const fetchProjects = async () => {
       try {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects`);
-        // Fallback to empty array if no data
-        setProjects(res.data || []);
+        // Fallback to empty array if no data or invalid data type
+        setProjects(Array.isArray(res.data) ? res.data : []);
       } catch (error) {
         console.error("Error fetching projects:", error);
       } finally {
