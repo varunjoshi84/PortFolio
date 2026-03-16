@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Mail, MailOpen, CheckCircle, Clock } from 'lucide-react';
 
 interface ContactMessage {
@@ -23,16 +24,13 @@ const MessagesManager = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const res = await fetch('/api/contact', {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/contact`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      if (!res.ok) throw new Error('Failed to fetch messages');
       
-      const data = await res.json();
-      setMessages(data);
+      setMessages(res.data);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -43,14 +41,11 @@ const MessagesManager = () => {
   const handleMarkAsRead = async (id: string) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`/api/contact/${id}/read`, {
-        method: 'PATCH',
+      await axios.patch(`${import.meta.env.VITE_API_URL}/api/contact/${id}/read`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      if (!res.ok) throw new Error('Failed to mark as read');
       
       // Update local state
       setMessages(messages.map(m => m._id === id ? { ...m, isRead: true } : m));
