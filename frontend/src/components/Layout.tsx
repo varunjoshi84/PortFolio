@@ -72,9 +72,6 @@ const Layout = () => {
             <p className="text-[#a0a0a0] font-body text-sm mb-4 md:mb-0">
               &copy; {new Date().getFullYear()} Varun Joshi. All rights reserved.
             </p>
-            <Link to="/admin/login" className="text-[#666] hover:text-accent font-body text-xs uppercase tracking-widest transition-colors">
-              Admin Login
-            </Link>
           </div>
         </div>
       </footer>
