@@ -18,7 +18,7 @@ const Hero = () => {
           Varun Joshi.
         </h1>
         <h2 className="text-2xl md:text-3xl font-heading text-[#a0a0a0] mb-8">
-          Software Engineer | Backend Developer | MERN & NestJS
+          Software Engineer | Backend Developer | MERN & NestJS | Android Developer
         </h2>
         
         <p className="text-lg text-[#888] font-body max-w-xl mb-10 leading-relaxed">
