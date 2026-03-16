@@ -18,7 +18,10 @@ export class ContactController {
       return { success: true, message: 'Message sent successfully' };
     } catch (error) {
       console.error('Contact submission error:', error);
-      throw new HttpException('Failed to send message', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Failed to send message',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }
