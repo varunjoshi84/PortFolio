@@ -14,7 +14,7 @@ const Contact = () => {
     setStatus({ type: null, message: '' });
     
     try {
-      await axios.post('import.meta.env.VITE_API_URL/api/contact', formData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/contact`, formData);
       setStatus({ type: 'success', message: 'Message sent successfully! Check your email for a confirmation.' });
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {

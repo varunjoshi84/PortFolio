@@ -53,7 +53,7 @@ const Terminal = () => {
           newHistory.push({ type: 'system', content: 'Fetching projects from database...' });
           setHistory([...newHistory]);
           try {
-            const { data } = await axios.get('import.meta.env.VITE_API_URL/api/projects');
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects`);
             if (data.length === 0) {
               newHistory.push({ type: 'output', content: 'No projects found.' });
             } else {
@@ -73,7 +73,7 @@ const Terminal = () => {
           newHistory.push({ type: 'system', content: 'Fetching skills from database...' });
           setHistory([...newHistory]);
           try {
-            const { data } = await axios.get('import.meta.env.VITE_API_URL/api/skills');
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/skills`);
             if (data.length === 0) {
               newHistory.push({ type: 'output', content: 'No skills found.' });
             } else {

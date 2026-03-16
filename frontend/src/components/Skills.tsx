@@ -61,7 +61,7 @@ const Skills = () => {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const res = await axios.get('import.meta.env.VITE_API_URL/api/skills');
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/skills`);
         const skillsData = res.data || [];
         
         // Group skills by category to match the UI format
