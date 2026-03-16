@@ -8,7 +8,7 @@ const dnsLookup = promisify(lookup);
 @Injectable()
 export class ContactService {
   private readonly logger = new Logger(ContactService.name);
-  private transporter;
+  private transporter: any;
 
   constructor() {
     const user = process.env.EMAIL_USER;
@@ -16,9 +16,10 @@ export class ContactService {
 
     if (!user || !pass) {
       this.logger.error(`❌ Missing EMAIL_USER or EMAIL_PASS`);
-    } else {
-      this.logger.log(`✅ SMTP ready for ${user}`);
+      return;
     }
+
+    this.logger.log(`✅ SMTP ready for ${user}`);
 
     // Do NOT use hostname — resolve to IPv4 address first, then pass IP directly
     // This bypasses Render's broken IPv6 routing entirely
