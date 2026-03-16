@@ -5,6 +5,12 @@ import { Github, Users, Star, GitCommit } from 'lucide-react';
 const GITHUB_USERNAME = 'varunjoshi84';
 const DAY_LABELS = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 
+interface ContributionDay {
+  date: string;
+  count: number;
+  level: number;
+}
+
 const GithubSection = () => {
   const stats = [
     { label: 'Repositories', value: '10', icon: GitCommit },
@@ -12,9 +18,9 @@ const GithubSection = () => {
     { label: 'Stars',        value: '3',  icon: Star      },
   ];
 
-  const [weeks, setWeeks]     = useState([]);
+  const [weeks, setWeeks]     = useState<ContributionDay[][]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState(null);
+  const [error, setError]     = useState<string | null>(null);
   const [total, setTotal]     = useState(0);
 
   useEffect(() => {
@@ -26,9 +32,9 @@ const GithubSection = () => {
         if (!res.ok) throw new Error('fetch failed');
         const data = await res.json();
         const contributions = data.contributions ?? [];
-        const grouped = [];
-        let week = [];
-        contributions.forEach((day, idx) => {
+        const grouped: ContributionDay[][] = [];
+        let week: ContributionDay[] = [];
+        contributions.forEach((day: ContributionDay, idx: number) => {
           week.push(day);
           if (week.length === 7 || idx === contributions.length - 1) {
             grouped.push(week);
@@ -36,8 +42,8 @@ const GithubSection = () => {
           }
         });
         setWeeks(grouped);
-        setTotal(contributions.reduce((s, d) => s + (d.count ?? 0), 0));
-      } catch (e) {
+        setTotal(contributions.reduce((s: number, d: ContributionDay) => s + (d.count ?? 0), 0));
+      } catch (e: any) {
         setError(e.message);
         setWeeks(
           Array.from({ length: 53 }, () =>
@@ -50,7 +56,7 @@ const GithubSection = () => {
     })();
   }, []);
 
-  const cellStyle = (level) => {
+  const cellStyle = (level: number) => {
     if (level === 0) return { backgroundColor: 'rgba(255,255,255,0.05)' };
     const pct = [20, 40, 65, 100][level - 1];
     return {

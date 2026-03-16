@@ -3,14 +3,23 @@ import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
 import axios from 'axios';
 
+interface Project {
+  title: string;
+  description: string;
+  image: string;
+  techStack: string[];
+  githubLink?: string;
+  liveLink?: string;
+}
+
 const Projects = () => {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get('import.meta.env.VITE_API_URL/api/projects');
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects`);
         // Fallback to empty array if no data
         setProjects(res.data || []);
       } catch (error) {
@@ -46,7 +55,7 @@ const Projects = () => {
 
         {/* 2-column grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {projects.map((project, idx) => (
+          {projects.map((project: Project, idx: number) => (
             <ProjectCard key={idx} project={project} idx={idx} />
           ))}
         </div>
@@ -55,7 +64,7 @@ const Projects = () => {
   );
 };
 
-const ProjectCard = ({ project, idx }) => {
+const ProjectCard = ({ project, idx }: { project: Project; idx: number }) => {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -120,7 +129,7 @@ const ProjectCard = ({ project, idx }) => {
 
         {/* Tech stack */}
         <div className="flex flex-wrap gap-2 pt-1">
-          {project.techStack.map((tech, i) => (
+          {project.techStack.map((tech: string, i: number) => (
             <span
               key={i}
               className="text-[11px] font-mono text-[#666] border border-white/5 px-2 py-0.5 rounded-sm bg-white/[0.02]"
