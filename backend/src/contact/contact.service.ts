@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import * as dns from 'dns';
+
+// Render's free tier outbound IPv6 network is unreachable.
+// This forces Node.js to resolve 'smtp.gmail.com' to an IPv4 address.
+dns.setDefaultResultOrder('ipv4first');
 
 @Injectable()
 export class ContactService {
