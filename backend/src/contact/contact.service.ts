@@ -3,7 +3,7 @@ import * as nodemailer from 'nodemailer';
 import { lookup } from 'dns';
 import { promisify } from 'util';
 
-const lookupAsync = promisify(lookup);
+const dnsLookup = promisify(lookup);
 
 @Injectable()
 export class ContactService {
@@ -20,23 +20,42 @@ export class ContactService {
       this.logger.log(`✅ SMTP ready for ${user}`);
     }
 
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,           // STARTTLS on 587
-      auth: { user, pass },
-      // Force IPv4 — Render free tier blocks outbound IPv6
-      family: 4,
-      tls: {
-        rejectUnauthorized: false,
-      },
-      connectionTimeout: 15000,
-      greetingTimeout: 10000,
-      socketTimeout: 20000,
-    } as any);
+    // Do NOT use hostname — resolve to IPv4 address first, then pass IP directly
+    // This bypasses Render's broken IPv6 routing entirely
+    this.initTransporter(user, pass);
+  }
+
+  private async initTransporter(user: string, pass: string) {
+    try {
+      // Force IPv4 resolution of smtp.gmail.com
+      const { address } = await dnsLookup('smtp.gmail.com', { family: 4 });
+      this.logger.log(`✅ Resolved smtp.gmail.com → ${address} (IPv4)`);
+
+      this.transporter = nodemailer.createTransport({
+        host: address,        // Use the IPv4 IP directly, not the hostname
+        port: 587,
+        secure: false,
+        auth: { user, pass },
+        tls: {
+          rejectUnauthorized: false,
+          servername: 'smtp.gmail.com', // SNI still uses hostname for TLS
+        },
+        connectionTimeout: 15000,
+        greetingTimeout: 10000,
+        socketTimeout: 20000,
+      } as any);
+
+      this.logger.log(`✅ Transporter created with IPv4 address ${address}`);
+    } catch (err) {
+      this.logger.error(`❌ DNS lookup failed: ${err.message}`);
+    }
   }
 
   async sendMessage(name: string, email: string, message: string) {
+    if (!this.transporter) {
+      throw new InternalServerErrorException('Email transporter not initialized.');
+    }
+
     const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
 
     const mailToAdmin = {
