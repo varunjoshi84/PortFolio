@@ -1,18 +1,23 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { Resend } from 'resend';
+import { Contact, ContactDocument } from './schemas/contact.schema';
 
 @Injectable()
 export class ContactService {
   private readonly logger = new Logger(ContactService.name);
   private resend: Resend;
 
-  constructor() {
+  constructor(
+    @InjectModel(Contact.name) private contactModel: Model<ContactDocument>,
+  ) {
     const apiKey = process.env.RESEND_API_KEY;
 
     if (!apiKey) {
-      this.logger.error('❌ Missing RESEND_API_KEY env var');
+      this.logger.error(' Missing RESEND_API_KEY env var');
     } else {
-      this.logger.log('✅ Resend email service ready');
+      this.logger.log(' Resend email service ready');
     }
 
     this.resend = new Resend(apiKey);
@@ -22,6 +27,15 @@ export class ContactService {
     const adminEmail = process.env.EMAIL_USER || 'joshivarun266@gmail.com';
 
     try {
+      // Save to database
+      const newContact = new this.contactModel({
+        name,
+        email,
+        message,
+      });
+      await newContact.save();
+      this.logger.log(`✅ Contact submission saved to database for ${email}`);
+
       // Notify admin
       await this.resend.emails.send({
         from: 'Portfolio Contact <onboarding@resend.dev>',
@@ -39,7 +53,7 @@ export class ContactService {
           </div>
         `,
       });
-      this.logger.log(`📧 Admin notification sent to ${adminEmail}`);
+      this.logger.log(` Admin notification sent to ${adminEmail}`);
 
       // Auto-reply to sender
       await this.resend.emails.send({
@@ -55,11 +69,23 @@ export class ContactService {
           </div>
         `,
       });
-      this.logger.log(`📧 Auto-reply sent to ${email}`);
+      this.logger.log(`Auto-reply sent to ${email}`);
 
     } catch (error) {
-      this.logger.error('❌ Resend error:', error.message);
+      this.logger.error(' Resend error:', error.message);
       throw new InternalServerErrorException('Failed to send contact emails.');
     }
+  }
+
+  async findAll() {
+    return this.contactModel.find().sort({ createdAt: -1 }).exec();
+  }
+
+  async markAsRead(id: string) {
+    return this.contactModel.findByIdAndUpdate(
+      id,
+      { isRead: true },
+      { new: true },
+    ).exec();
   }
 }

@@ -9,6 +9,7 @@ import AdminLayout from './admin/AdminLayout';
 import AdminDashboard from './admin/AdminDashboard';
 import ProjectsManager from './admin/ProjectsManager';
 import SkillsManager from './admin/SkillsManager';
+import MessagesManager from './admin/MessagesManager';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="projects" element={<ProjectsManager />} />
             <Route path="skills" element={<SkillsManager />} />
+            <Route path="messages" element={<MessagesManager />} />
           </Route>
         </Route>
       </Routes>

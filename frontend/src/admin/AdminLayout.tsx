@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, Code2, LogOut } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Code2, LogOut, Mail } from 'lucide-react';
 
 const AdminLayout = () => {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const AdminLayout = () => {
     { path: '/admin/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
     { path: '/admin/projects', icon: <FolderKanban size={20} />, label: 'Projects' },
     { path: '/admin/skills', icon: <Code2 size={20} />, label: 'Skills' },
+    { path: '/admin/messages', icon: <Mail size={20} />, label: 'Messages' },
   ];
 
   return (
