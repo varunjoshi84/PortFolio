@@ -58,22 +58,17 @@ const Layout = () => {
         )}
       </AnimatePresence>
 
-      {/* Main — no min-h, no flex-grow, just natural height */}
       <main className="w-full">
         <div className="container mx-auto px-6 max-w-6xl w-full">
           <Outlet />
         </div>
       </main>
 
-      {/* Footer — immediately after content */}
+      {/* Footer */}
       <footer className="w-full py-8 border-t border-white/10">
-        <div className="container mx-auto px-6 max-w-6xl text-center">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <p className="text-[#a0a0a0] font-body text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} Varun Joshi. All rights reserved.
-            </p>
-          </div>
-        </div>
+        <p className="text-[#a0a0a0] font-body text-sm text-center">
+          &copy; {new Date().getFullYear()} Varun Joshi. All rights reserved.
+        </p>
       </footer>
     </div>
   );
