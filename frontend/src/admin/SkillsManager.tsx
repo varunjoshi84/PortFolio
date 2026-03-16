@@ -12,7 +12,7 @@ const SkillsManager = () => {
   // Dummy fetch for visual test
   const fetchSkills = async () => {
     try {
-      const res = await axios.get('import.meta.env.VITE_API_URL/api/skills');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/skills`);
       setSkills(res.data);
     } catch {
       setSkills([
@@ -53,7 +53,7 @@ const SkillsManager = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('import.meta.env.VITE_API_URL/api/skills', payload, {
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/skills`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

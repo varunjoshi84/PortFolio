@@ -19,7 +19,7 @@ const ProjectsManager = () => {
   // Dummy data for visual setup if backend isn't linked yet.
   const fetchProjects = async () => {
     try {
-      const res = await axios.get('import.meta.env.VITE_API_URL/api/projects');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/projects`);
       setProjects(res.data);
     } catch {
       // Fallback dummy for development view
@@ -62,7 +62,7 @@ const ProjectsManager = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('import.meta.env.VITE_API_URL/api/projects', payload, {
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/projects`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
