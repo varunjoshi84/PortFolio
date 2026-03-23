@@ -20,7 +20,7 @@ export class ContactService {
       this.logger.log(' Resend email service ready');
     }
 
-    this.resend = new Resend(apiKey);
+    this.resend = new Resend(apiKey || 're_dummy_key_to_prevent_crash_on_boot');
   }
 
   async sendMessage(name: string, email: string, message: string) {

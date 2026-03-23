@@ -7,7 +7,7 @@ const About = () => {
     {
       icon: <BookOpen className="text-accent" size={24} />,
       title: "Education",
-      description: "B.Tech Computer Science 2023-2027"
+      description: "B.Tech Computer Science 2023-2027, Lovely Professional University"
     },
     {
       icon: <Server className="text-accent" size={24} />,
