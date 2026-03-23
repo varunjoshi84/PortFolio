@@ -75,7 +75,7 @@ const Experience = () => {
         },
         {
           title: 'Problem Solving Intermediate',
-          role: 'HackerRank (or similar)',
+          role: 'HackerRank',
           link: 'https://drive.google.com/file/d/1Y7LYpMeXilCzlYW_3tM8dR2eVMwx-Yes/view?usp=drive_link',
         }
       ]
