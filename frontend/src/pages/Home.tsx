@@ -7,6 +7,7 @@ import Experience from '../components/Experience';
 import GithubSection from '../components/GithubSection';
 import Terminal from '../components/Terminal';
 import Contact from '../components/Contact';
+import Achievements from '../components/Achievements';
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
       <Skills />
       <Projects />
       <Experience />
+      <Achievements />
       <GithubSection />
       <Terminal />
       <Contact />
