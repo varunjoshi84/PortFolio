@@ -109,7 +109,7 @@ const ProjectsManager = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-6 flex flex-col items-stretch gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-heading text-text">Manage Projects</h1>
         <button 
           onClick={() => {
@@ -124,7 +124,7 @@ const ProjectsManager = () => {
       </div>
 
       {isFormOpen && (
-        <div className="mb-10 p-6 bg-[#0a0a0a] border border-white/10 rounded-sm">
+        <div className="mb-8 p-4 sm:mb-10 sm:p-6 bg-[#0a0a0a] border border-white/10 rounded-sm">
           <h2 className="text-xl font-heading text-text mb-6">
             {editingId ? 'Edit Project' : 'Create New Project'}
           </h2>
@@ -168,7 +168,7 @@ const ProjectsManager = () => {
         </div>
       )}
 
-      <div className="bg-[#0a0a0a] border border-white/5 rounded-sm overflow-hidden">
+      <div className="overflow-x-auto bg-[#0a0a0a] border border-white/5 rounded-sm">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-[#111] border-b border-white/5">

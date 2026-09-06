@@ -12,25 +12,24 @@ interface ContributionDay {
 }
 
 const GithubSection = () => {
-  const stats = [
-    { label: 'Repositories', value: '10', icon: GitCommit },
-    { label: 'Followers',    value: '5',  icon: Users     },
-    { label: 'Stars',        value: '3',  icon: Star      },
-  ];
-
   const [weeks, setWeeks]     = useState<ContributionDay[][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState<string | null>(null);
   const [total, setTotal]     = useState(0);
+  const [stats, setStats] = useState([
+    { label: 'Repositories', value: '-', icon: GitCommit },
+    { label: 'Followers', value: '-', icon: Users },
+    { label: 'Stars', value: '-', icon: Star },
+  ]);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(
+        const contributionsResponse = await fetch(
           `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`
         );
-        if (!res.ok) throw new Error('fetch failed');
-        const data = await res.json();
+        if (!contributionsResponse.ok) throw new Error('Unable to load GitHub contributions');
+        const data = await contributionsResponse.json();
         const contributions = data.contributions ?? [];
         const grouped: ContributionDay[][] = [];
         let week: ContributionDay[] = [];
@@ -44,14 +43,34 @@ const GithubSection = () => {
         setWeeks(grouped);
         setTotal(contributions.reduce((s: number, d: ContributionDay) => s + (d.count ?? 0), 0));
       } catch (e: any) {
-        setError(e.message);
-        setWeeks(
-          Array.from({ length: 53 }, () =>
-            Array.from({ length: 7 }, () => ({ level: Math.floor(Math.random() * 5), count: 0, date: '' }))
-          )
-        );
+        setError(e.message || 'Unable to load GitHub contributions');
+        setWeeks([]);
       } finally {
         setLoading(false);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [profileResponse, repositoriesResponse] = await Promise.all([
+          fetch(`https://api.github.com/users/${GITHUB_USERNAME}`),
+          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`),
+        ]);
+        if (!profileResponse.ok || !repositoriesResponse.ok) throw new Error('Unable to load GitHub stats');
+
+        const profile = await profileResponse.json();
+        const repositories = await repositoriesResponse.json();
+        const stars = repositories.reduce((sum: number, repository: { stargazers_count?: number }) => sum + (repository.stargazers_count ?? 0), 0);
+
+        setStats([
+          { label: 'Repositories', value: String(profile.public_repos ?? 0), icon: GitCommit },
+          { label: 'Followers', value: String(profile.followers ?? 0), icon: Users },
+          { label: 'Stars', value: String(stars), icon: Star },
+        ]);
+      } catch {
+        // Keep the stats as '-' when GitHub is unavailable instead of showing stale values.
       }
     })();
   }, []);
@@ -73,9 +92,9 @@ const GithubSection = () => {
         transition={{ duration: 0.8 }}
       >
         {/* Heading */}
-        <div className="flex items-center gap-4 mb-14 justify-end">
-          <div className="h-px bg-white/10 flex-grow max-w-[200px]" />
+        <div className="flex items-center gap-4 mb-14 justify-start">
           <h2 className="text-4xl text-text font-heading font-bold">Open Source</h2>
+          <div className="h-px bg-white/10 flex-grow max-w-[200px]" />
         </div>
 
         {/* Main layout */}
@@ -120,7 +139,7 @@ const GithubSection = () => {
               <h3 className="font-heading text-sm text-text flex items-center gap-2">
                 <Github size={15} className="text-accent" />
                 Contribution Activity
-                {error && <span className="text-[11px] text-[#555] ml-1">(preview)</span>}
+                {error && <span className="text-[11px] text-[#888] ml-1">(unavailable)</span>}
               </h3>
               <span className="text-[11px] text-[#555] font-mono">Last 12 months</span>
             </div>
@@ -128,6 +147,10 @@ const GithubSection = () => {
             {loading ? (
               <div className="flex items-center justify-center py-10">
                 <span className="text-[#555] text-sm animate-pulse tracking-widest">loading…</span>
+              </div>
+            ) : error ? (
+              <div className="flex min-h-[150px] items-center justify-center text-center text-sm text-[#777]">
+                GitHub contribution data is temporarily unavailable.
               </div>
             ) : (
               <div className="flex flex-col gap-3">

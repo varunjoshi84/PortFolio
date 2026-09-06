@@ -48,9 +48,9 @@ const Projects = () => {
         transition={{ duration: 0.8 }}
       >
         {/* Heading */}
-        <div className="flex items-center gap-4 mb-14">
-          <h2 className="text-4xl text-text font-heading font-bold">Featured Projects</h2>
+        <div className="flex items-center justify-end gap-4 mb-14">
           <div className="h-px bg-white/10 flex-grow max-w-[200px]" />
+          <h2 className="text-4xl text-text font-heading font-bold">Featured Projects</h2>
         </div>
 
         {/* 2-column grid */}

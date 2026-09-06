@@ -6,7 +6,7 @@ const SkillsManager = () => {
   const [skills, setSkills] = useState<any[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: '', category: 'Frontend', icon: '' });
+  const [formData, setFormData] = useState({ name: '', category: 'Frontend Development', icon: '' });
   const [loading, setLoading] = useState(false);
 
   // Dummy fetch for visual test
@@ -60,7 +60,7 @@ const SkillsManager = () => {
       
       setIsFormOpen(false);
       setEditingId(null);
-      setFormData({ name: '', category: 'Frontend', icon: '' });
+      setFormData({ name: '', category: 'Frontend Development', icon: '' });
       fetchSkills(); // Refresh list
     } catch (err) {
       console.error(err);
@@ -74,7 +74,7 @@ const SkillsManager = () => {
     setEditingId(skill._id);
     setFormData({
       name: skill.name || '',
-      category: skill.category || 'Frontend',
+      category: skill.category === 'Backend' ? 'Backend Development' : skill.category === 'Frontend' ? 'Frontend Development' : skill.category || 'Frontend Development',
       icon: skill.icon || skill.iconUrl || ''
     });
     setIsFormOpen(true);
@@ -97,13 +97,13 @@ const SkillsManager = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-6 flex flex-col items-stretch gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-heading text-text">Manage Skills</h1>
         <button 
           onClick={() => {
             setIsFormOpen(!isFormOpen);
             setEditingId(null);
-            setFormData({ name: '', category: 'Frontend', icon: '' });
+            setFormData({ name: '', category: 'Frontend Development', icon: '' });
           }}
           className="flex items-center gap-2 px-4 py-2 bg-accent text-background rounded-sm hover:bg-[#b09257] transition-colors font-medium text-sm"
         >
@@ -112,7 +112,7 @@ const SkillsManager = () => {
       </div>
 
       {isFormOpen && (
-        <div className="mb-10 p-6 bg-[#0a0a0a] border border-white/10 rounded-sm">
+        <div className="mb-8 p-4 sm:mb-10 sm:p-6 bg-[#0a0a0a] border border-white/10 rounded-sm">
           <h2 className="text-xl font-heading text-text mb-6">
             {editingId ? 'Edit Skill' : 'Create New Skill'}
           </h2>
@@ -143,8 +143,8 @@ const SkillsManager = () => {
                 onChange={e => setFormData({...formData, category: e.target.value})}
                 className="bg-[#111] border border-white/5 p-3 rounded-sm text-[#888] focus:outline-none focus:border-accent"
               >
-                <option>Frontend</option>
-                <option>Backend</option>
+                <option>Frontend Development</option>
+                <option>Backend Development</option>
                 <option>Databases</option>
                 <option>Languages</option>
                 <option>Tools & DevOps</option>
@@ -174,7 +174,7 @@ const SkillsManager = () => {
         </div>
       )}
 
-      <div className="bg-[#0a0a0a] border border-white/5 rounded-sm overflow-hidden">
+      <div className="overflow-x-auto bg-[#0a0a0a] border border-white/5 rounded-sm">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-[#111] border-b border-white/5">

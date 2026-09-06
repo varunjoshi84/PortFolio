@@ -34,9 +34,9 @@ const About = () => {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8 }}
       >
-        <div className="flex items-center gap-4 mb-12">
-          <h2 className="text-4xl text-text font-heading font-bold">About Me</h2>
+        <div className="flex items-center justify-end gap-4 mb-12">
           <div className="h-[2px] bg-white/10 flex-grow max-w-[200px]"></div>
+          <h2 className="text-4xl text-text font-heading font-bold">About Me</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

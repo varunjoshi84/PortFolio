@@ -5,6 +5,14 @@ import axios from 'axios';
 // Using devicons CDN — proper colored brand logos
 const ICON_BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
 
+const normalizeCategory = (category: string) => {
+  const aliases: Record<string, string> = {
+    Backend: 'Backend Development',
+    Frontend: 'Frontend Development',
+  };
+  return aliases[category] || category;
+};
+
 const SkillCard: React.FC<{ name: string; icon: string; delay: number }> = ({ name, icon, delay }) => {
   const [imgError, setImgError] = useState(false);
 
@@ -66,7 +74,7 @@ const Skills = () => {
         
         // Group skills by category to match the UI format
         const grouped = skillsData.reduce((acc: any, skill: any) => {
-          const cat = skill.category || 'Other';
+          const cat = normalizeCategory(skill.category || 'Other');
           if (!acc[cat]) {
             acc[cat] = [];
           }
@@ -108,9 +116,9 @@ const Skills = () => {
         transition={{ duration: 0.8 }}
       >
         {/* Heading */}
-        <div className="flex items-center gap-4 mb-16 justify-end">
-          <div className="h-px bg-white/10 flex-grow max-w-[200px]" />
+        <div className="flex items-center gap-4 mb-16 justify-start">
           <h2 className="text-4xl text-text font-heading font-bold">Technical Skills</h2>
+          <div className="h-px bg-white/10 flex-grow max-w-[200px]" />
         </div>
 
         {/* Categories stacked */}

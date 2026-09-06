@@ -67,7 +67,7 @@ const MessagesManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center border-b border-white/10 pb-4">
+      <div className="flex flex-col items-start gap-2 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-heading font-bold text-text mb-2">Messages</h1>
           <p className="text-[#888] font-body text-sm">
@@ -92,7 +92,7 @@ const MessagesManager = () => {
               )}
               
               <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-4 border-b border-white/5 pb-4 w-full">
+                  <div className="flex w-full flex-wrap items-center gap-3 border-b border-white/5 pb-4 sm:gap-4">
                   <div className="bg-white/5 p-3 rounded-sm text-accent">
                     {msg.isRead ? <MailOpen size={24} /> : <Mail size={24} />}
                   </div>
@@ -120,11 +120,11 @@ const MessagesManager = () => {
                 </div>
               </div>
 
-              <div className="mt-4 text-[#d0d0d0] font-body text-sm leading-relaxed whitespace-pre-wrap pl-16">
+              <div className="mt-4 text-[#d0d0d0] font-body text-sm leading-relaxed whitespace-pre-wrap sm:pl-16">
                 {msg.message}
               </div>
 
-              <div className="mt-6 flex justify-end gap-3 pl-16 border-t border-white/5 pt-4">
+              <div className="mt-6 flex flex-wrap justify-end gap-3 border-t border-white/5 pt-4 sm:pl-16">
                 {!msg.isRead && (
                   <button
                     onClick={() => handleMarkAsRead(msg._id)}
