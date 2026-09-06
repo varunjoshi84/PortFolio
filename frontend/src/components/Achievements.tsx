@@ -11,7 +11,7 @@ const Achievements = () => {
     },
     {
       icon: <Code className="text-accent" size={24} />,
-      title: "400+ Problems Solved",
+      title: "550+ Problems Solved",
       description: "Successfully solved over 400 algorithmic and data structure problems.",
     },
     {
